@@ -35,12 +35,12 @@ exports.answer = function(req, res) {
 
 exports.index = function(req, res) {
   var criteria = req.query.search;
-  var criteriaObject = {};
+  var criteriaObject = {
+    order: ['pregunta']
+  };
   if(criteria){
     criteria = '%' + criteria.replace(/\s/g, '%') + '%';
-    criteriaObject = {
-      where: ["pregunta like ?", criteria]
-    };
+    criteriaObject.where = ["pregunta like ?", criteria];
   }
   models.Quiz.findAll(criteriaObject).then(
     function(quizes) {
