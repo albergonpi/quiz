@@ -18,7 +18,7 @@ exports.load = function(req, res, next, quizId) {
 }
 
 exports.show = function(req, res) {
-  var model = {quiz: req.quiz};
+  var model = {quiz: req.quiz, errors: []};
   res.render('quizes/show', model);
 };
 
@@ -28,7 +28,8 @@ exports.answer = function(req, res) {
     resp = "Correcto";
     var model = {
       quiz: req.quiz,
-      respuesta: resp
+      respuesta: resp,
+      errors: []
     };
     res.render('quizes/answer', model);
 };
@@ -44,7 +45,7 @@ exports.index = function(req, res) {
   }
   models.Quiz.findAll(criteriaObject).then(
     function(quizes) {
-      res.render('quizes/index', {quizes: quizes});
+      res.render('quizes/index', {quizes: quizes, errors: []});
     }
   ).catch(
     function(error) {
@@ -58,13 +59,19 @@ exports.new = function(req, res){
     pregunta: "Pregunta",
     respuesta: "Respuesta"
   });
-  res.render("quizes/new", {quiz: quiz});
+  res.render("quizes/new", {quiz: quiz, errors: []});
 };
 
 exports.create = function(req, res){
   var quiz = models.Quiz.build(req.body.quiz);
 
-  quiz.save({fields: ['pregunta', 'respuesta']}).then(function(){
-    res.redirect('/quizes');
+  quiz.validate().then(function(err){
+    if(err){
+      res.render('quizes/new', {quiz : quiz, errors: err.errors});
+    } else {
+      quiz.save({fields: ['pregunta', 'respuesta']}).then(function(){
+        res.redirect('/quizes');
+      });
+    }
   });
 };
