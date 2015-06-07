@@ -39,7 +39,7 @@ exports.answer = function(req, res) {
     res.render('quizes/answer', model);
 };
 
-exports.index = function(req, res) {
+exports.index = function(req, res, next) {
   var criteria = req.query.search;
   var criteriaObject = {
     order: ['pregunta']
@@ -93,5 +93,13 @@ exports.update = function(req, res){
         res.redirect('/quizes');
       });
     }
+  });
+};
+
+exports.destroy = function(req, res, next){
+  req.quiz.destroy().then(function(){
+    res.redirect('/quizes');
+  }).catch(function(error){
+    next(error);
   });
 };

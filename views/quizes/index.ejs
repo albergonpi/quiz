@@ -10,11 +10,18 @@
     <td>
       <a href="quizes/<%= quizes[i].id %>"><%= quizes[i].pregunta %> </a>
     </td>
-      <td>
-        <a href="quizes/<%= quizes[i].id %>/edit">
-          <button type="button">editar</button>
-        </a>
-      </td>
+    <td>
+      <a href="quizes/<%= quizes[i].id %>/edit">
+        <button type="button">editar</button>
+      </a>
+    </td>
+    <td>
+      <form method="POST" action="quizes/<%= quizes[i].id %>?_method=delete">
+        <button type="bubmit" onClick="return confirm('Borrar: <%= quizes[i].pregunta %>');">
+          borrar
+        </button>
+      </form>
+    </td>
   </tr>
 <% } %>
 </table>
