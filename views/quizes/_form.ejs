@@ -1,6 +1,34 @@
 <label for="preg" class="rem">Pregunta:</label>
 <input type="text" id="preg" name="quiz[pregunta]" value="<%= quiz.pregunta %>"/> <p>
-<label for="respg" class="rem">Respuesta:</label>
+<label for="resp" class="rem">Respuesta:</label>
 <input type="text" id="resp" name="quiz[respuesta]" value="<%= quiz.respuesta %>"/> <p>
+<label for="tema" class="rem">Tema:</label>
+<%
+  var otro, humanidades, ocio, ciencia, tecnologia;
+  otro = humanidades = ocio = ciencia = tecnologia = '';
+  switch(quiz.tema){
+    case 'humanidades':
+      humanidades = 'selected';
+      break;
+    case 'ciencia':
+      ciencia = 'selected';
+      break;
+    case 'ocio':
+      ocio = 'selected';
+      break;
+    case 'tecnologia':
+      tecnologia = 'selected';
+      break;
+    default:
+      otro = 'selected';
+  }
+%>
+<select id="tema" name="quiz[tema]">
+  <option value="otro" <%= otro %>>Otro</option>
+  <option value="humanidades" <%= humanidades %>>Humanidades</option>
+  <option value="ocio" <%= ocio %>>Ocio</option>
+  <option value="ciencia" <%= ciencia %>>Ciencia</option>
+  <option value="tecnologia" <%= tecnologia %>>Tecnología</option>
+</select> <p>
 <a href="/quizes"><button type="button">Cancelar</button></a>
 <input type="submit" value="Salvar">
