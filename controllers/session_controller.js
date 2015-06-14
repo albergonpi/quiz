@@ -1,3 +1,16 @@
+exports.sessionExpired = function(req, res, next) {
+  if(req.session.user){
+    var now = new Date().getTime();
+    if(req.session.user.expire > now){
+      var expire = now + 2 * 60 * 1000;
+      req.session.user.expire = expire;
+    }else{
+      delete req.session.user;
+    }
+  }
+  next();
+};
+
 exports.loginRequired = function(req, res, next) {
   if(req.session.user){
     next();
@@ -24,7 +37,9 @@ exports.create = function(req, res) {
       res.redirect("/login");
       return;
     }
-    req.session.user = {id:user.id, username:user.username};
+    var expire = new Date().getTime();
+    expire +=  2 * 60 * 1000;
+    req.session.user = {id:user.id, username:user.username, expire:expire};
 
     res.redirect(req.session.redir.toString());
   });
